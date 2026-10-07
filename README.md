@@ -26,28 +26,27 @@ The repository is modularly structured into dedicated script files and interacti
 *   **`train_classification.py`**: The main orchestration training script. It loads the dataset, splits records, runs optimization parameters across classifiers, and saves the final production files [url].
 
 ###  Production & Deployment Scripts
-*   **`app.py`**: The raw user dashboard interface script constructed to accept manual parameter updates and display immediate audit verdicts [url].
 *   **`predict.py`**: A lightweight standalone prediction engine designed to parse single row queries dynamically [url].
-*   **`inference_classification.py`**: The automated operational batch tool engineered to scan incoming monthly spreadsheet logs, execute vector predictions, and isolate high-risk targets [url].
+*   **`inference_classification.py`**: The automated operational batch tool engineered to scan incoming monthly spreadsheet logs, execute vector predictions, and isolate high-risk targets 
 
 ###  Interactive Experiment Notebooks
 *   **`Predicting Freight Cost.ipynb`**: The exploratory workbook tracking early stage data analysis, baseline price regression curves, and correlation visualizations [url].
-*   **`Invoice_Flagging.ipynb`**: The advanced classification development notebook containing feature distribution analysis, Welch's T-Test logic, and model benchmarking comparisons [url].
+*   **`Invoice_Flagging.ipynb`**: The advanced classification development notebook containing feature distribution analysis, Welch's T-Test logic, and model benchmarking comparisons 
 
 ---
 
 ##  Business Value & Objectives
-*   **Prevent Financial Leakage:** Eradicates manual oversight loopholes and directly catches hidden vendor billing spikes or shipping overcharges [url].
-*   **Automate Compliance Routing:** Accelerates transaction velocity by auto-approving low-risk invoices while cleanly routing high-risk anomalies to finance managers [url].
-*   **Scalable Data Guardrails:** Replaces manual guesses with rigorous mathematical curves capable of evaluating thousands of lines of data instantly [url].
+*   **Prevent Financial Leakage:** Eradicates manual oversight loopholes and directly catches hidden vendor billing spikes or shipping overcharges 
+*   **Automate Compliance Routing:** Accelerates transaction velocity by auto-approving low-risk invoices while cleanly routing high-risk anomalies to finance managers 
+*   **Scalable Data Guardrails:** Replaces manual guesses with rigorous mathematical curves capable of evaluating thousands of lines of data instantly 
 
 ---
 
 ## ⚙️ Feature Engineering & Core Metrics
-The models audit transactions across three foundational numeric clusters [url]:
-*   **`invoice_quantity` / `invoice_dollars`**: Dimensions tracking total volumes and billing scale [url].
-*   **`Freight`**: The calculated focus target metric isolating precise shipping overhead margins (`Dollars` - `Expected Cost`) [url].
-*   **`days_po_to_invoice` / `avg_receiving_delay`**: Time lag markers derived via SQL `julianday` calculations to pinpoint rushed or irregular backend billing behavior [url, url].
+The models audit transactions across three foundational numeric clusters:
+*   **`invoice_quantity` / `invoice_dollars`**: Dimensions tracking total volumes and billing scale .
+*   **`Freight`**: The calculated focus target metric isolating precise shipping overhead margins (`Dollars` - `Expected Cost`) .
+*   **`days_po_to_invoice` / `avg_receiving_delay`**: Time lag markers derived via SQL `julianday` calculations to pinpoint rushed or irregular backend billing behavior 
 
 ---
 
