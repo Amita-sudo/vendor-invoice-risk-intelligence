@@ -1,0 +1,94 @@
+import streamlit as st
+import pandas as pd
+import pickle
+import numpy as np
+from pathlib import Path
+
+# 1. Page Configuration & Layout Title
+st.set_page_config(page_title="Invoice Risk Auditor", page_icon="🚨", layout="centered")
+
+st.title("🚨 Vendor Invoice Risk Intelligence System")
+st.markdown("Enter the invoice details below. The system will use your trained Machine Learning Classifier to audit transaction boundaries and flag risks automatically.")
+st.markdown("---")
+
+# 2. Helper function to load model and run inference
+def predict_invoice_flag(input_dict):
+    """
+    Loads the saved classifier file and predicts whether an invoice is clean or risky.
+    """
+    model_path = Path("/content/drive/MyDrive/Freight_Cost_Project/models/best_invoice_classifier.pkl")
+    
+    if not model_path.exists():
+        st.error("❌ Trained model file `best_invoice_classifier.pkl` not found! Please run train_classification.py first.")
+        return {'Predicted_Flag': 0}
+        
+    with open(model_path, "rb") as f:
+        classifier = pickle.load(f)
+        
+    # Standardize incoming single metrics to match the training data shape
+    # Using the features: 'Quantity', 'Dollars', 'Freight'
+    quantity = input_dict["invoice_quantity"][0]
+    dollars = input_dict["invoice_dollars"][0]
+    freight = input_dict["Freight"][0]
+    
+    features_array = np.array([[quantity, dollars, freight]])
+    prediction = classifier.predict(features_array)
+    
+    return {'Predicted_Flag': int(prediction[0])}
+
+# 3. Interactive Input Form Structure (Matching Instructor Screen Layout)
+with st.form("invoice_form"):
+    st.subheader("📋 Enter Invoice Transaction Specifications")
+    
+    invoice_quantity = st.number_input(
+        "Invoice Quantity", 
+        min_value=1.0, 
+        value=150.0
+    )
+    
+    invoice_dollars = st.number_input(
+        "Invoice Total Dollars (\$)", 
+        min_value=1.0, 
+        value=3500.0
+    )
+    
+    freight = st.number_input(
+        "Freight Shipping Charge (\$)", 
+        min_value=0.0, 
+        value=125.0
+    )
+    
+    total_item_quantity = st.number_input(
+        "Total Item Quantity (PO Match)", 
+        min_value=1.0, 
+        value=150.0
+    )
+    
+    total_item_dollars = st.number_input(
+        "Total Item Dollars",
+        min_value=1.0,
+        value=2476.0
+    )
+
+    submit_flag = st.form_submit_button("🧠 Evaluate Invoice Risk")
+
+# 4. Evaluation Engine Triggers on Form Submission
+if submit_flag:
+    input_data = {
+        "invoice_quantity": [invoice_quantity],
+        "invoice_dollars": [invoice_dollars],
+        "Freight": [freight],
+        "total_item_quantity": [total_item_quantity],
+        "total_item_dollars": [total_item_dollars]
+    }
+    
+    # Run the machine learning classification inference pipeline
+    flag_prediction = predict_invoice_flag(input_data)['Predicted_Flag']
+    
+    is_flagged = bool(flag_prediction)
+    
+    st.markdown("### 🔔 Audit Outcome:")
+    if is_flagged:
+        st.error("🚨 Invoice requires **MANUAL APPROVAL**")
+    else:
+        st.success("✅ Invoice is **SAFE for Auto-Approval**")
